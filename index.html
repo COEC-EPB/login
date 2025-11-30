@@ -41,7 +41,6 @@
 </div>
 
 <script>
-    // Usuários cadastrados (pode depois puxar da API)
     const usuarios = [
         { matricula: "3080117", senha: "1234" },
         { matricula: "20202", senha: "abcd" }
@@ -59,10 +58,10 @@
             return;
         }
 
-        // SALVA LOGIN
+        // Guarda matrícula
         localStorage.setItem("usuarioLogado", matricula);
 
-        // Redireciona
+        // Redireciona para página de consulta
         window.location.href = "https://pedrofillype14.github.io/prestacao_de_contas/";
     }
 </script>
