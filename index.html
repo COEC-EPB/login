@@ -72,9 +72,14 @@ async function logar() {
         window.location.href = "https://pedrofillype14.github.io/prestacao_de_contas/";
 
     } catch (e) {
-        erro.innerText = "❌ Erro ao conectar com o servidor!";
-        console.error(e);
-    alert("ERRO: " + err);
+  return new Response(JSON.stringify({
+    ok: false,
+    error: e.message || "Erro desconhecido",
+    stack: e.stack || "Sem stack"
+  }), {
+    status: 500,
+    headers: { "Content-Type": "application/json", ...corsHeaders }
+  });
 }
     }
 }
