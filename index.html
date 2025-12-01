@@ -52,7 +52,7 @@ async function logar() {
     }
 
     try {
-        const resp = await fetch("https://long-hall-0aaa.pedro-fillype.workers.dev/login", {
+        const resp = await fetch("https://long-hall-0aaa.pedro-fillype.workers.dev/", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ matricula, senha })
