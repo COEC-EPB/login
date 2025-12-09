@@ -103,6 +103,37 @@
         color: white;
         font-size: 36px;
     }
+
+    /* 🔥 MODAL TROCAR SENHA */
+    .modal-bg {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-box {
+        width: 360px;
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+        animation: fadeIn 0.4s ease;
+    }
+
+    .modal-box h4 {
+        margin: 0 0 12px 0;
+        text-align: center;
+        color: var(--azul-escuro);
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .close-btn {
+        background: var(--laranja);
+    }
 </style>
 </head>
 <body>
@@ -126,6 +157,25 @@
     <p id="erro"></p>
 
 </div>
+
+
+<!-- 🔥 MODAL DE ALTERAÇÃO DE SENHA -->
+<div class="modal-bg" id="modalSenha">
+    <div class="modal-box">
+        <h4>Primeiro acesso</h4>
+        <p style="text-align:center;margin-top:-5px;">Defina uma nova senha para continuar.</p>
+
+        <label>Nova senha:</label>
+        <input type="password" id="novaSenha">
+
+        <label>Confirmar senha:</label>
+        <input type="password" id="confSenha">
+
+        <button onclick="salvarNovaSenha()">Salvar nova senha</button>
+        <p id="erroSenha" style="color:#d60000;text-align:center;font-weight:600;"></p>
+    </div>
+</div>
+
 
 <script>
 async function logar() {
@@ -152,15 +202,68 @@ async function logar() {
             return;
         }
 
-        // Salva sessão
+        // 🔥 SE É O PRIMEIRO ACESSO → ABRE MODAL
+        if (data.primeiroAcesso === true) {
+            window.matriculaTemp = matricula; // salva temporário
+            document.getElementById("modalSenha").style.display = "flex";
+            return;
+        }
+
+        // 🔥 Senha já normal → salva sessão e redireciona
         localStorage.setItem("matricula", matricula);
         localStorage.setItem("usuarioLogado", "sim");
+
+        window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+
+    } catch (err) {
+        erro.innerText = "❌ Erro: " + err.message;
+    }
+}
+
+async function salvarNovaSenha() {
+    const nova = document.getElementById("novaSenha").value.trim();
+    const conf = document.getElementById("confSenha").value.trim();
+    const erroSenha = document.getElementById("erroSenha");
+
+    if (!nova || !conf) {
+        erroSenha.innerText = "⚠️ Preencha os dois campos!";
+        return;
+    }
+
+    if (nova !== conf) {
+        erroSenha.innerText = "❌ Senhas não coincidem!";
+        return;
+    }
+
+    try {
+        const resp = await fetch("https://long-hall-0aaa.pedro-fillype.workers.dev/trocar_senha", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                matricula: window.matriculaTemp,
+                novaSenha: nova
+            })
+        });
+
+        const data = await resp.json();
+
+        if (!data.ok) {
+            erroSenha.innerText = "❌ " + data.error;
+            return;
+        }
+
+        // ✔ Senha trocada — salva sessão
+        localStorage.setItem("matricula", window.matriculaTemp);
+        localStorage.setItem("usuarioLogado", "sim");
+
+        // Fecha modal
+        document.getElementById("modalSenha").style.display = "none";
 
         // Redireciona
         window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
 
     } catch (err) {
-        erro.innerText = "❌ Erro: " + err.message;
+        erroSenha.innerText = "❌ Erro: " + err.message;
     }
 }
 </script>
