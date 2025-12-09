@@ -8,77 +8,120 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-    /* Container central */
-.login-container {
-  max-width: 380px;
-  margin: 40px auto;
-  padding: 35px 30px;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.12);
-  text-align: center;
-}
+    :root {
+        --azul: #0097CE;
+        --azul-escuro: #0079a6;
+        --laranja: #F36F21;
+        --cinza-bg: #eef3f7;
+    }
 
-/* Ícone circular */
-.login-icon {
-  width: 85px;
-  height: 85px;
-  background: var(--energisa-blue);
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 42px;
-  margin: 0 auto 20px auto;
-}
+    body {
+        background: var(--cinza-bg);
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        font-family: "Segoe UI", Roboto, sans-serif;
+    }
 
-/* Título */
-.login-title {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 25px;
-  color: #333;
-}
+    .login-card {
+        width: 380px;
+        padding: 32px;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+        border-top: 6px solid var(--laranja);
+        animation: fadeIn 0.5s ease;
+        text-align: center;
+    }
 
-/* Labels */
-.login-container label {
-  display: block;
-  text-align: left;
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: #555;
-}
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-/* Inputs */
-.login-container input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  margin-bottom: 18px;
-  font-size: 15px;
-}
+    h3 {
+        color: var(--azul-escuro);
+        font-weight: 800;
+        margin-top: 5px;
+        margin-bottom: 25px;
+        font-size: 22px;
+    }
 
-/* Botão */
-.btn-login {
-  width: 100%;
-  padding: 12px;
-  background: var(--energisa-blue);
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: 0.2s;
-}
+    .icon-box {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto 12px auto;
+        background: var(--azul);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    }
 
-.btn-login:hover {
-  background: var(--energisa-blue-dark);
-}
+    .icon-box i {
+        color: white;
+        font-size: 36px;
+    }
 
-    /* 🔥 MODAL TROCAR SENHA */
+    label {
+        display: block;
+        text-align: left;
+        width: 100%;
+        max-width: 315px;
+        margin: 0 auto 6px auto;
+        font-weight: 600;
+        color: #444;
+    }
+
+    input {
+        width: 100%;
+        max-width: 315px;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #cfd8dc;
+        margin-bottom: 18px;
+        font-size: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input:focus {
+        border-color: var(--azul);
+        box-shadow: 0 0 0 2px rgba(0,151,206,0.25);
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        max-width: 315px;
+        background: var(--azul);
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s;
+        margin-top: 5px;
+    }
+
+    button:hover {
+        background: var(--azul-escuro);
+    }
+
+    #erro {
+        text-align: center;
+        color: #d60000;
+        font-weight: 600;
+        margin-top: 12px;
+    }
+
+    /* MODAL */
     .modal-bg {
         position: fixed;
         inset: 0;
@@ -95,18 +138,19 @@
         border-radius: 16px;
         box-shadow: 0 6px 24px rgba(0,0,0,0.25);
         animation: fadeIn 0.4s ease;
+        text-align: center;
     }
 
     .modal-box h4 {
         margin: 0 0 12px 0;
-        text-align: center;
         color: var(--azul-escuro);
         font-size: 20px;
         font-weight: 700;
     }
 
-    .close-btn {
-        background: var(--laranja);
+    #erroSenha {
+        font-weight: 600;
+        margin-top: 8px;
     }
 </style>
 </head>
@@ -132,12 +176,11 @@
 
 </div>
 
-
-<!-- 🔥 MODAL DE ALTERAÇÃO DE SENHA -->
+<!-- MODAL PRIMEIRO ACESSO -->
 <div class="modal-bg" id="modalSenha">
     <div class="modal-box">
         <h4>Primeiro acesso</h4>
-        <p style="text-align:center;margin-top:-5px;">Defina uma nova senha para continuar.</p>
+        <p>Defina uma nova senha para continuar.</p>
 
         <label>Nova senha:</label>
         <input type="password" id="novaSenha">
@@ -146,10 +189,9 @@
         <input type="password" id="confSenha">
 
         <button onclick="salvarNovaSenha()">Salvar nova senha</button>
-        <p id="erroSenha" style="color:#d60000;text-align:center;font-weight:600;"></p>
+        <p id="erroSenha" style="color:#d60000;"></p>
     </div>
 </div>
-
 
 <script>
 async function logar() {
@@ -176,14 +218,12 @@ async function logar() {
             return;
         }
 
-        // 🔥 SE É O PRIMEIRO ACESSO → ABRE MODAL
         if (data.primeiroAcesso === true) {
-            window.matriculaTemp = matricula; // salva temporário
+            window.matriculaTemp = matricula;
             document.getElementById("modalSenha").style.display = "flex";
             return;
         }
 
-        // 🔥 Senha já normal → salva sessão e redireciona
         localStorage.setItem("matricula", matricula);
         localStorage.setItem("usuarioLogado", "sim");
 
@@ -226,14 +266,11 @@ async function salvarNovaSenha() {
             return;
         }
 
-        // ✔ Senha trocada — salva sessão
         localStorage.setItem("matricula", window.matriculaTemp);
         localStorage.setItem("usuarioLogado", "sim");
 
-        // Fecha modal
         document.getElementById("modalSenha").style.display = "none";
 
-        // Redireciona
         window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
 
     } catch (err) {
