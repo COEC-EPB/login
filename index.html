@@ -121,6 +121,15 @@
         margin-top: 12px;
     }
 
+    . esquecer {
+        margin-top: 8px;
+        cursor: pointer;
+        color: var(--azul-escuro);
+        font-weight: 600;
+        display: inline-block;
+    }
+    .esquecer:hover { text-decoration: underline; }
+
     /* MODAL */
     .modal-bg {
         position: fixed;
@@ -172,8 +181,9 @@
 
     <button onclick="logar()">Entrar <i class="bi bi-box-arrow-in-right"></i></button>
 
-    <p id="erro"></p>
+    <div class="esquecer" onclick="recuperarSenha()">Esqueci minha senha</div>
 
+    <p id="erro"></p>
 </div>
 
 <!-- MODAL PRIMEIRO ACESSO -->
@@ -190,6 +200,23 @@
 
         <button onclick="salvarNovaSenha()">Salvar nova senha</button>
         <p id="erroSenha" style="color:#d60000;"></p>
+    </div>
+</div>
+
+<!-- MODAL RECUPERAR SENHA -->
+<div class="modal-bg" id="modalRecuperar">
+    <div class="modal-box">
+        <h4>Recuperar Senha</h4>
+        <p>Confirme sua matrícula e CPF para visualizar sua senha.</p>
+
+        <label>Matrícula:</label>
+        <input type="text" id="recMatricula">
+
+        <label>CPF:</label>
+        <input type="text" id="recCpf" placeholder="Somente números">
+
+        <button onclick="confirmarRecuperacao()">Confirmar</button>
+        <p id="erroRec" style="color:#d60000;"></p>
     </div>
 </div>
 
@@ -228,6 +255,45 @@ async function logar() {
         localStorage.setItem("usuarioLogado", "sim");
 
         window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+
+    } catch (err) {
+        erro.innerText = "❌ Erro: " + err.message;
+    }
+}
+
+// 🔹 ABRIR MODAL DE RECUPERAÇÃO
+function recuperarSenha() {
+    document.getElementById("modalRecuperar").style.display = "flex";
+}
+
+// 🔹 CONFIRMAR DADOS E MOSTRAR SENHA
+async function confirmarRecuperacao() {
+    const matricula = document.getElementById("recMatricula").value.trim();
+    const cpf = document.getElementById("recCpf").value.trim();
+    const erro = document.getElementById("erroRec");
+
+    if (!matricula || !cpf) {
+        erro.innerText = "⚠️ Preencha matrícula e CPF!";
+        return;
+    }
+
+    try {
+        const resp = await fetch("https://long-hall-0aaa.pedro-fillype.workers.dev/recuperar_senha", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ matricula, cpf })
+        });
+
+        const data = await resp.json();
+
+        if (!data.ok) {
+            erro.innerText = "❌ " + data.error;
+            return;
+        }
+
+        // Mostra a senha dentro do modal
+        erro.style.color = "green";
+        erro.innerHTML = `<b>Senha encontrada:</b> ${data.senha}`;
 
     } catch (err) {
         erro.innerText = "❌ Erro: " + err.message;
