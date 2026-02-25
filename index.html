@@ -308,6 +308,22 @@ async function logar() {
       return;
     }
 
+    if (data.primeiroAcesso === true) {
+  // primeiro acesso: guarda matrícula e espera definir senha
+  window.matriculaTemp = matricula;
+  abrirModal("modalPrimeiroAcesso");
+  return;
+}
+
+// login normal
+localStorage.setItem("matricula", matricula);
+localStorage.setItem("usuarioLogado", "sim");
+if (data.nome)     localStorage.setItem("nome", data.nome);
+if (data.email)    localStorage.setItem("email", data.email);
+if (data.regional) localStorage.setItem("regional", data.regional);
+
+window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+
     localStorage.setItem("matricula", matricula);
     localStorage.setItem("usuarioLogado", "sim");
     window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
@@ -350,8 +366,29 @@ async function salvarNovaSenha() {
       return;
     }
 
-    localStorage.setItem("matricula", window.matriculaTemp);
-    localStorage.setItem("usuarioLogado", "sim");
+    // 🔎 Busca dados completos do colaborador (incluindo regional)
+    try {
+      const colResp = await fetch(
+        `${BASE_URL}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`
+      );
+      const colData = await colResp.json();
+
+      if (colData.ok && colData.dados) {
+        localStorage.setItem("matricula", colData.dados.matricula || window.matriculaTemp);
+        localStorage.setItem("usuarioLogado", "sim");
+        if (colData.dados.nome)     localStorage.setItem("nome", colData.dados.nome);
+        if (colData.dados.email)    localStorage.setItem("email", colData.dados.email);
+        if (colData.dados.regional) localStorage.setItem("regional", colData.dados.regional);
+      } else {
+        // fallback se der algo errado
+        localStorage.setItem("matricula", window.matriculaTemp);
+        localStorage.setItem("usuarioLogado", "sim");
+      }
+    } catch (e) {
+      // se der erro na busca, ao menos mantém login
+      localStorage.setItem("matricula", window.matriculaTemp);
+      localStorage.setItem("usuarioLogado", "sim");
+    }
 
     fecharModal("modalPrimeiroAcesso");
     window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
