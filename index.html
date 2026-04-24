@@ -282,7 +282,7 @@ function limparCPF(v){
 
 // 🔥 FETCH PADRÃO (COM COOKIE)
 function apiFetch(url, options = {}) {
-  const token = localStorage.getItem("token");
+  const token = sessionStorage.getItem("token");
 
   return fetch(url, {
     headers: {
@@ -319,7 +319,7 @@ async function logar() {
     }
 
     // 🔥 SALVA TOKEN
-    localStorage.setItem("token", data.token);
+    sessionStorage.setItem("token", data.token);
 
     if (data.primeiroAcesso === true) {
       window.matriculaTemp = matricula;
