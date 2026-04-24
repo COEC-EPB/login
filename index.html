@@ -265,6 +265,10 @@
 <script>
 const BASE_URL = "https://long-hall-0aaa.pedro-fillype.workers.dev";
 
+  const data = await resp.json();
+
+localStorage.setItem("token", data.token); // 🔥 ESSENCIAL
+
 let resetToken = null;
 
 function fecharModal(id){
@@ -280,38 +284,16 @@ function limparCPF(v){
 }
 
 // 🔥 FETCH PADRÃO (COM COOKIE)
-async function apiFetch(url, options = {}) {
-  try {
-    const resp = await fetch(url, {
-      credentials: "include",
-      ...options
-    });
+function apiFetch(url, options = {}) {
+  const token = localStorage.getItem("token");
 
-    if (resp.status === 401) {
-      console.warn("Sessão inválida → resetando tudo");
-
-      // 🔥 limpa TUDO que você controla
-      localStorage.clear();
-      sessionStorage.clear();
-
-      // 🔥 tenta apagar cookie (melhor esforço)
-      document.cookie = "session_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-
-      alert("Sessão expirada. Faça login novamente.");
-
-      window.location.href = "https://coec-epb.github.io/login/";
-      return null;
-    }
-
-    return resp;
-
-  } catch (err) {
-    console.error("Erro de rede:", err);
-    alert("Erro de conexão.");
-    return null;
-  }
+  return fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    ...options
+  });
 }
-
 // ================= LOGIN =================
 async function logar() {
   const matricula = document.getElementById("matricula").value.trim();
