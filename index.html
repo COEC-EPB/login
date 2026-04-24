@@ -188,40 +188,53 @@ function fecharModal(id){ document.getElementById(id).style.display="none"; }
 const limparCPF = v => String(v||"").replace(/\D/g,"");
 
 /* ===== login ===== */
+
 async function logar(){
+  const matriculaInput = document.getElementById("matricula");
+  const senhaInput = document.getElementById("senha");
+  const erro = document.getElementById("erro");
+
   const matricula = matriculaInput.value.trim();
   const senha = senhaInput.value.trim();
   erro.innerText = "";
 
-  if(!matricula || !senha){
+  if (!matricula || !senha) {
     erro.innerText = "Preencha matrícula e senha!";
     return;
   }
 
-  const resp = await fetch(`${BASE_URL}/login`,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ matricula, senha })
-  });
-  const json = await resp.json();
+  try {
+    const resp = await fetch(`${BASE_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matricula, senha })
+    });
 
-  if(!json.ok){
-    erro.innerText = json.error || "Credenciais inválidas";
-    return;
+    const json = await resp.json();
+
+    if (!json.ok) {
+      erro.innerText = json.error || "Credenciais inválidas";
+      return;
+    }
+
+    setToken(json.token);
+
+    if (json.primeiroAcesso) {
+      window.matriculaTemp = matricula;
+      abrirModal("modalPrimeiroAcesso");
+      return;
+    }
+
+    localStorage.setItem("matricula", matricula);
+    localStorage.setItem("usuarioLogado", "sim");
+    location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+
+  } catch (e) {
+    erro.innerText = "Erro ao tentar login.";
+    console.error(e);
   }
-
-  setToken(json.token);
-
-  if(json.primeiroAcesso){
-    window.matriculaTemp = matricula;
-    abrirModal("modalPrimeiroAcesso");
-    return;
-  }
-
-  localStorage.setItem("matricula", matricula);
-  localStorage.setItem("usuarioLogado","sim");
-  location.href="https://coec-epb.github.io/prestacao_de_contas/";
 }
+
 
 /* ===== primeiro acesso ===== */
 async function salvarNovaSenha(){
