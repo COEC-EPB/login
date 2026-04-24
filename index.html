@@ -277,11 +277,36 @@ function limparCPF(v){
 }
 
 // 🔥 FETCH PADRÃO (COM COOKIE)
-function apiFetch(url, options = {}) {
-  return fetch(url, {
-    credentials: "include",
-    ...options
-  });
+async function apiFetch(url, options = {}) {
+  try {
+    const resp = await fetch(url, {
+      credentials: "include",
+      ...options
+    });
+
+    if (resp.status === 401) {
+      console.warn("Sessão inválida → resetando tudo");
+
+      // 🔥 limpa TUDO que você controla
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // 🔥 tenta apagar cookie (melhor esforço)
+      document.cookie = "session_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+      alert("Sessão expirada. Faça login novamente.");
+
+      window.location.href = "https://coec-epb.github.io/login/";
+      return null;
+    }
+
+    return resp;
+
+  } catch (err) {
+    console.error("Erro de rede:", err);
+    alert("Erro de conexão.");
+    return null;
+  }
 }
 
 // ================= LOGIN =================
