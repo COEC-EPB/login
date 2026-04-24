@@ -3,103 +3,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-
 <title>Login - ADD</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-:root {
-  --azul: #0097CE;
-  --azul-escuro: #0079a6;
-  --laranja: #F36F21;
-  --cinza-bg: #eef3f7;
-}
-body {
-  background: var(--cinza-bg);
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  font-family: "Segoe UI", Roboto, sans-serif;
-}
-.login-card {
-  width: 380px;
-  padding: 32px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
-  border-top: 6px solid var(--laranja);
-  text-align: center;
-}
-.icon-box {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 12px;
-  background: var(--azul);
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.icon-box i {
-  color: white;
-  font-size: 36px;
-}
-label {
-  display:block;
-  text-align:left;
-  font-weight:600;
-  margin:8px 0 4px;
-}
-input {
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:1px solid #cfd8dc;
-}
-button {
-  width:100%;
-  margin-top:12px;
-  padding:14px;
-  font-weight:700;
-  border:none;
-  background:var(--azul);
-  color:#fff;
-  border-radius:10px;
-}
-button:hover { background: var(--azul-escuro); }
-.esquecer {
-  margin-top:10px;
-  cursor:pointer;
-  color:var(--azul-escuro);
-  font-weight:600;
-}
-#erro { color:#d60000; font-weight:600; margin-top:10px; }
-.modal-bg {
-  position:fixed; inset:0;
-  background:rgba(0,0,0,.5);
-  display:none;
-  justify-content:center;
-  align-items:center;
-}
-.modal-box {
-  background:white;
-  padding:24px;
-  border-radius:14px;
-  width:360px;
-}
-.btn-secondary {
-  background:#6c757d;
-}
-.msg { color:#d60000; font-weight:600; margin-top:8px; }
+  :root {
+    --azul: #0097CE;
+    --azul-escuro: #0079a6;
+    --laranja: #F36F21;
+    --cinza-bg: #eef3f7;
+  }
+
+  body {
+    background: var(--cinza-bg);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    font-family: "Segoe UI", Roboto, sans-serif;
+  }
+
+  .login-card {
+    width: 380px;
+    padding: 32px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    border-top: 6px solid var(--laranja);
+    animation: fadeIn 0.5s ease;
+    text-align: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h3 {
+    color: var(--azul-escuro);
+    font-weight: 800;
+    margin-top: 5px;
+    margin-bottom: 25px;
+    font-size: 22px;
+  }
+
+  .icon-box {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 12px auto;
+    background: var(--azul);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  }
+
+  .icon-box i { color: white; font-size: 36px; }
+
+  label {
+    display: block;
+    text-align: left;
+    width: 100%;
+    max-width: 315px;
+    margin: 0 auto 6px auto;
+    font-weight: 600;
+    color: #444;
+  }
+
+  input {
+    width: 100%;
+    max-width: 315px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #cfd8dc;
+    margin-bottom: 18px;
+    font-size: 15px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  input:focus {
+    border-color: var(--azul);
+    box-shadow: 0 0 0 2px rgba(0,151,206,0.25);
+    outline: none;
+  }
+
+  button {
+    width: 100%;
+    max-width: 315px;
+    background: var(--azul);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 5px;
+  }
+
+  button:hover { background: var(--azul-escuro); }
+
+  .btn-secondary {
+    background: #6c757d;
+  }
+  .btn-secondary:hover {
+    background: #5b636a;
+  }
+
+  #erro {
+    text-align: center;
+    color: #d60000;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  .esquecer {
+    margin-top: 10px;
+    cursor: pointer;
+    color: var(--azul-escuro);
+    font-weight: 600;
+    display: inline-block;
+  }
+  .esquecer:hover { text-decoration: underline; }
+
+  /* MODAL */
+  .modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 14px;
+  }
+
+  .modal-box {
+    width: 360px;
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+    animation: fadeIn 0.4s ease;
+    text-align: center;
+  }
+
+  .modal-box h4 {
+    margin: 0 0 12px 0;
+    color: var(--azul-escuro);
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 6px;
+  }
+
+  .msg {
+    font-weight: 600;
+    margin-top: 10px;
+    color: #d60000;
+  }
 </style>
 </head>
-
 <body>
 
 <div class="login-card">
@@ -109,210 +183,314 @@ button:hover { background: var(--azul-escuro); }
 
   <h3>Login ADD</h3>
 
-  <label>Matrícula</label>
-  <input id="matricula">
+  <label>Matrícula:</label>
+  <input type="text" id="matricula" placeholder="Digite sua matrícula">
 
-  <label>Senha</label>
-  <input id="senha" type="password">
+  <label>Senha:</label>
+  <input type="password" id="senha" placeholder="Digite sua senha">
 
-  <button onclick="logar()">Entrar</button>
+  <button onclick="logar()">Entrar <i class="bi bi-box-arrow-in-right"></i></button>
+
   <div class="esquecer" onclick="abrirRecuperacao()">Esqueci minha senha</div>
 
   <p id="erro"></p>
 </div>
 
-<!-- MODAIS -->
+<!-- MODAL PRIMEIRO ACESSO -->
 <div class="modal-bg" id="modalPrimeiroAcesso">
   <div class="modal-box">
     <h4>Primeiro acesso</h4>
-    <label>Nova senha</label>
-    <input id="novaSenha" type="password">
-    <label>Confirmar senha</label>
-    <input id="confSenha" type="password">
-    <button onclick="salvarNovaSenha()">Salvar</button>
-    <button class="btn-secondary" onclick="fecharModal('modalPrimeiroAcesso')">Cancelar</button>
+    <p>Defina uma nova senha para continuar.</p>
+
+    <label>Nova senha:</label>
+    <input type="password" id="novaSenha">
+
+    <label>Confirmar senha:</label>
+    <input type="password" id="confSenha">
+
+    <div class="modal-actions">
+      <button onclick="salvarNovaSenha()">Salvar</button>
+      <button class="btn-secondary" onclick="fecharModal('modalPrimeiroAcesso')">Cancelar</button>
+    </div>
+
     <p id="erroSenha" class="msg"></p>
   </div>
 </div>
 
+<!-- MODAL 1: CONFIRMAR MATRÍCULA + CPF -->
 <div class="modal-bg" id="modalRecuperar">
   <div class="modal-box">
     <h4>Recuperar acesso</h4>
-    <label>Matrícula</label>
-    <input id="recMatricula">
-    <label>CPF</label>
-    <input id="recCpf">
-    <button onclick="confirmarRecuperacao()">Confirmar</button>
-    <button class="btn-secondary" onclick="fecharModal('modalRecuperar')">Cancelar</button>
+    <p>Informe sua matrícula e CPF para criar uma nova senha.</p>
+
+    <label>Matrícula:</label>
+    <input type="text" id="recMatricula" placeholder="Digite sua matrícula">
+
+    <label>CPF:</label>
+    <input type="text" id="recCpf" placeholder="Somente números">
+
+    <div class="modal-actions">
+      <button onclick="confirmarRecuperacao()">Confirmar</button>
+      <button class="btn-secondary" onclick="fecharModal('modalRecuperar')">Cancelar</button>
+    </div>
+
     <p id="erroRec" class="msg"></p>
   </div>
 </div>
 
+<!-- MODAL 2: DEFINIR NOVA SENHA COM TOKEN -->
 <div class="modal-bg" id="modalNovaSenha">
   <div class="modal-box">
-    <h4>Nova senha</h4>
-    <label>Senha</label>
-    <input id="recNovaSenha" type="password">
-    <label>Confirmar</label>
-    <input id="recConfSenha" type="password">
-    <button onclick="finalizarRecuperacao()">Salvar</button>
-    <button class="btn-secondary" onclick="fecharModal('modalNovaSenha')">Cancelar</button>
+    <h4>Definir nova senha</h4>
+    <p>Crie uma senha nova para sua conta.</p>
+
+    <label>Nova senha:</label>
+    <input type="password" id="recNovaSenha">
+
+    <label>Confirmar senha:</label>
+    <input type="password" id="recConfSenha">
+
+    <div class="modal-actions">
+      <button onclick="finalizarRecuperacao()">Salvar</button>
+      <button class="btn-secondary" onclick="fecharModal('modalNovaSenha')">Cancelar</button>
+    </div>
+
     <p id="erroNova" class="msg"></p>
   </div>
 </div>
 
 <script>
 const BASE_URL = "https://long-hall-0aaa.pedro-fillype.workers.dev";
-let memoryToken = null;
+
+// guarda o token retornado do /recuperar_senha
 let resetToken = null;
 
-/* ===== helpers ===== */
-function setToken(t){
-  memoryToken = t;
-  localStorage.setItem("token", t);
-  sessionStorage.setItem("token", t);
+function fecharModal(id){
+  document.getElementById(id).style.display = "none";
 }
-function getToken(){
-  return memoryToken
-    || localStorage.getItem("token")
-    || sessionStorage.getItem("token");
-}
-function apiFetch(url, options = {}){
-  const token = getToken();
-  const headers = new Headers(options.headers || {});
-  if(token) headers.set("Authorization", `Bearer ${token}`);
-  return fetch(url,{ ...options, headers });
-}
-function abrirModal(id){ document.getElementById(id).style.display="flex"; }
-function fecharModal(id){ document.getElementById(id).style.display="none"; }
-const limparCPF = v => String(v||"").replace(/\D/g,"");
 
-/* ===== login ===== */
+function abrirModal(id){
+  document.getElementById(id).style.display = "flex";
+}
 
-async function logar(){
-  const matriculaInput = document.getElementById("matricula");
-  const senhaInput = document.getElementById("senha");
+function limparCPF(v){
+  return String(v || "").replace(/\D/g, "");
+}
+
+async function logar() {
+  const matricula = document.getElementById("matricula").value.trim();
+  const senha = document.getElementById("senha").value.trim();
   const erro = document.getElementById("erro");
-
-  const matricula = matriculaInput.value.trim();
-  const senha = senhaInput.value.trim();
   erro.innerText = "";
 
   if (!matricula || !senha) {
-    erro.innerText = "Preencha matrícula e senha!";
+    erro.innerText = "⚠️ Preencha matrícula e senha!";
     return;
   }
 
-  const resp = await fetch(`${BASE_URL}/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ matricula, senha })
-  });
+  try {
+    const resp = await fetch(`${BASE_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matricula, senha })
+    });
 
-  const json = await resp.json();
-  
-console.log("LOGIN RESPONSE:", json);
-console.log("matricula backend:", json?.user?.matricula);
+    const data = await resp.json();
 
+    if (!data.ok) {
+      erro.innerText = "❌ " + (data.error || "Matrícula ou senha incorreta!");
+      return;
+    }
 
-  if (!json.ok) {
-    erro.innerText = json.error || "Credenciais inválidas";
-    return;
-  }
+    if (data.primeiroAcesso === true) {
+      window.matriculaTemp = matricula;
+      abrirModal("modalPrimeiroAcesso");
+      return;
+    }
 
-  // ✅ salva token
-setToken(json.token);
-
-// ✅ matrícula segura (não deixa gravar undefined)
-const matriculaSegura = String(
-  json?.user?.matricula ?? json?.matricula ?? matricula ?? ""
-).trim();
-
-if (!matriculaSegura || matriculaSegura === "undefined") {
-  erro.innerText = "Login ok, mas matrícula não veio do servidor.";
+    if (data.primeiroAcesso === true) {
+  // primeiro acesso: guarda matrícula e espera definir senha
+  window.matriculaTemp = matricula;
+  abrirModal("modalPrimeiroAcesso");
   return;
 }
 
-localStorage.setItem("matricula", matriculaSegura);
+// login normal
+localStorage.setItem("matricula", matricula);
 localStorage.setItem("usuarioLogado", "sim");
+if (data.nome)     localStorage.setItem("nome", data.nome);
+if (data.email)    localStorage.setItem("email", data.email);
+if (data.regional) localStorage.setItem("regional", data.regional);
 
-// opcional: já salva dados do user também (ajuda o form a preencher instantâneo)
-if (json?.user) {
-  localStorage.setItem("user_nome", json.user.nome || "");
-  localStorage.setItem("user_email", json.user.email || "");
-  localStorage.setItem("user_regional", json.user.regional || "");
+window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+
+    localStorage.setItem("matricula", matricula);
+    localStorage.setItem("usuarioLogado", "sim");
+    window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+
+  } catch (err) {
+    erro.innerText = "❌ Erro: " + err.message;
+  }
 }
-  location.href = "https://coec-epb.github.io/prestacao_de_contas/";
-}
 
+// ======= PRIMEIRO ACESSO =======
+async function salvarNovaSenha() {
+  const nova = document.getElementById("novaSenha").value.trim();
+  const conf = document.getElementById("confSenha").value.trim();
+  const erroSenha = document.getElementById("erroSenha");
+  erroSenha.innerText = "";
 
-
-/* ===== primeiro acesso ===== */
-async function salvarNovaSenha(){
-  if(novaSenha.value !== confSenha.value){
-    erroSenha.innerText="Senhas não conferem";
+  if (!nova || !conf) {
+    erroSenha.innerText = "⚠️ Preencha os dois campos!";
     return;
   }
-  const resp = await apiFetch(`${BASE_URL}/trocar_senha`,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      matricula: window.matriculaTemp,
-      novaSenha: novaSenha.value
-    })
-  });
-  const json = await resp.json();
-  if(!json.ok){
-    erroSenha.innerText=json.error||"Erro";
+  if (nova !== conf) {
+    erroSenha.innerText = "❌ Senhas não coincidem!";
     return;
   }
-  localStorage.setItem("matricula", window.matriculaTemp);
-  localStorage.setItem("usuarioLogado","sim");
-  location.href="https://coec-epb.github.io/prestacao_de_contas/";
+
+  try {
+    const resp = await fetch(`${BASE_URL}/trocar_senha`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        matricula: window.matriculaTemp,
+        novaSenha: nova
+      })
+    });
+
+    const data = await resp.json();
+
+    if (!data.ok) {
+      erroSenha.innerText = "❌ " + (data.error || "Falha ao salvar senha");
+      return;
+    }
+
+    // 🔎 Busca dados completos do colaborador (incluindo regional)
+    try {
+      const colResp = await fetch(
+        `${BASE_URL}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`
+      );
+      const colData = await colResp.json();
+
+      if (colData.ok && colData.dados) {
+        localStorage.setItem("matricula", colData.dados.matricula || window.matriculaTemp);
+        localStorage.setItem("usuarioLogado", "sim");
+        if (colData.dados.nome)     localStorage.setItem("nome", colData.dados.nome);
+        if (colData.dados.email)    localStorage.setItem("email", colData.dados.email);
+        if (colData.dados.regional) localStorage.setItem("regional", colData.dados.regional);
+      } else {
+        // fallback se der algo errado
+        localStorage.setItem("matricula", window.matriculaTemp);
+        localStorage.setItem("usuarioLogado", "sim");
+      }
+    } catch (e) {
+      // se der erro na busca, ao menos mantém login
+      localStorage.setItem("matricula", window.matriculaTemp);
+      localStorage.setItem("usuarioLogado", "sim");
+    }
+
+    fecharModal("modalPrimeiroAcesso");
+    window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+
+  } catch (err) {
+    erroSenha.innerText = "❌ Erro: " + err.message;
+  }
 }
 
-/* ===== recuperar senha ===== */
-function abrirRecuperacao(){
-  recMatricula.value = matricula.value;
-  recCpf.value="";
+// ======= ESQUECI MINHA SENHA =======
+function abrirRecuperacao() {
+  document.getElementById("erroRec").innerText = "";
+  document.getElementById("recMatricula").value = document.getElementById("matricula").value.trim();
+  document.getElementById("recCpf").value = "";
   abrirModal("modalRecuperar");
 }
 
-async function confirmarRecuperacao(){
-  const cpf = limparCPF(recCpf.value);
-  const resp = await fetch(`${BASE_URL}/recuperar_senha`,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ matricula: recMatricula.value, cpf })
-  });
-  const json = await resp.json();
-  if(!json.ok){
-    erroRec.innerText=json.error||"Erro";
+async function confirmarRecuperacao() {
+  const matricula = document.getElementById("recMatricula").value.trim();
+  const cpf = limparCPF(document.getElementById("recCpf").value.trim());
+  const erro = document.getElementById("erroRec");
+  erro.style.color = "#d60000";
+  erro.innerText = "";
+
+  if (!matricula || !cpf) {
+    erro.innerText = "⚠️ Preencha matrícula e CPF!";
     return;
   }
-  resetToken = json.token;
-  fecharModal("modalRecuperar");
-  abrirModal("modalNovaSenha");
+
+  try {
+    const resp = await fetch(`${BASE_URL}/recuperar_senha`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matricula, cpf })
+    });
+
+    const data = await resp.json();
+
+    if (!data.ok) {
+      erro.innerText = "❌ " + (data.error || "Dados inválidos");
+      return;
+    }
+
+    // guarda token e abre modal de nova senha
+    resetToken = data.token;
+
+    fecharModal("modalRecuperar");
+    document.getElementById("erroNova").innerText = "";
+    document.getElementById("recNovaSenha").value = "";
+    document.getElementById("recConfSenha").value = "";
+    abrirModal("modalNovaSenha");
+
+  } catch (err) {
+    erro.innerText = "❌ Erro: " + err.message;
+  }
 }
 
-async function finalizarRecuperacao(){
-  if(recNovaSenha.value !== recConfSenha.value){
-    erroNova.innerText="Senhas não conferem";
+async function finalizarRecuperacao() {
+  const nova = document.getElementById("recNovaSenha").value.trim();
+  const conf = document.getElementById("recConfSenha").value.trim();
+  const erro = document.getElementById("erroNova");
+  erro.innerText = "";
+
+  if (!nova || !conf) {
+    erro.innerText = "⚠️ Preencha os dois campos!";
     return;
   }
-  const resp = await fetch(`${BASE_URL}/definir_nova_senha`,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ token: resetToken, novaSenha: recNovaSenha.value })
-  });
-  const json = await resp.json();
-  if(!json.ok){
-    erroNova.innerText=json.error||"Erro";
+  if (nova !== conf) {
+    erro.innerText = "❌ Senhas não coincidem!";
     return;
   }
-  alert("Senha redefinida. Faça login.");
-  fecharModal("modalNovaSenha");
+  if (!resetToken) {
+    erro.innerText = "❌ Token não encontrado. Refaça a recuperação.";
+    return;
+  }
+
+  try {
+    const resp = await fetch(`${BASE_URL}/definir_nova_senha`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token: resetToken, novaSenha: nova })
+    });
+
+    const data = await resp.json();
+
+    if (!data.ok) {
+      erro.innerText = "❌ " + (data.error || "Falha ao trocar senha");
+      return;
+    }
+
+    fecharModal("modalNovaSenha");
+    alert("✅ Senha redefinida com sucesso! Agora faça login.");
+
+    // limpa token
+    resetToken = null;
+
+  } catch (err) {
+    erro.innerText = "❌ Erro: " + err.message;
+  }
 }
 </script>
+   <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ab3e837119ed4133bd616d3b06ef0e25"}'></script><!-- End Cloudflare Web Analytics -->
+
 </body>
 </html>
