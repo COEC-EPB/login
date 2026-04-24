@@ -282,7 +282,7 @@ function limparCPF(v){
 
 // 🔥 FETCH PADRÃO (COM COOKIE)
 function apiFetch(url, options = {}) {
-  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+  const token = getToken();
 
   return fetch(url, {
     headers: {
@@ -319,7 +319,7 @@ async function logar() {
     }
 
     // 🔥 SALVA TOKEN
-    sessionStorage.setItem("token", data.token);
+    setToken(data.token);
 
     if (data.primeiroAcesso === true) {
       window.matriculaTemp = matricula;
@@ -337,6 +337,36 @@ async function logar() {
   }
 }
 
+
+
+let memoryToken = null;
+
+function setToken(token) {
+  memoryToken = token;
+
+  try { localStorage.setItem("token", token); } catch {}
+  try { sessionStorage.setItem("token", token); } catch {}
+}
+
+function getToken() {
+  if (memoryToken) return memoryToken;
+
+  try {
+    const t1 = localStorage.getItem("token");
+    if (t1) return t1;
+  } catch {}
+
+  try {
+    const t2 = sessionStorage.getItem("token");
+    if (t2) return t2;
+  } catch {}
+
+  return null;
+}
+
+
+
+  
 // ================= PRIMEIRO ACESSO =================
 async function salvarNovaSenha() {
   const nova = document.getElementById("novaSenha").value.trim();
@@ -463,6 +493,15 @@ async function finalizarRecuperacao() {
     erro.innerText = "❌ Erro: " + err.message;
   }
 }
+  window.addEventListener("load", () => {
+  const token = getToken();
+
+  if (!token) {
+    alert("Sessão inválida. Faça login novamente.");
+    window.location.href = "https://coec-epb.github.io/login/";
+  }
+});
+  window.TOKEN = getToken();
 </script>
    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ab3e837119ed4133bd616d3b06ef0e25"}'></script><!-- End Cloudflare Web Analytics -->
 
