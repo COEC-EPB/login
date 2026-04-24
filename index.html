@@ -290,21 +290,16 @@ async function logar() {
 
   try {
     const resp = await fetch(`${BASE_URL}/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ matricula, senha })
-    });
+  method: "POST",
+  credentials: "include", // 🔥 ESSENCIAL
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ matricula, senha })
+});
 
     const data = await resp.json();
 
     if (!data.ok) {
       erro.innerText = "❌ " + (data.error || "Matrícula ou senha incorreta!");
-      return;
-    }
-
-    if (data.primeiroAcesso === true) {
-      window.matriculaTemp = matricula;
-      abrirModal("modalPrimeiroAcesso");
       return;
     }
 
@@ -369,8 +364,11 @@ async function salvarNovaSenha() {
     // 🔎 Busca dados completos do colaborador (incluindo regional)
     try {
       const colResp = await fetch(
-        `${BASE_URL}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`
-      );
+  `${BASE_URL}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`,
+  {
+    credentials: "include"
+  }
+);
       const colData = await colResp.json();
 
       if (colData.ok && colData.dados) {
