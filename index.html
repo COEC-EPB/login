@@ -360,6 +360,7 @@ async function salvarNovaSenha() {
       erroSenha.innerText = "❌ " + (data.error || "Falha ao salvar senha");
       return;
     }
+    localStorage.setItem("token", data.token);
 
     // 🔎 Busca dados completos do colaborador (incluindo regional)
     try {
