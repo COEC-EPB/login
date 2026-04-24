@@ -493,14 +493,7 @@ async function finalizarRecuperacao() {
     erro.innerText = "❌ Erro: " + err.message;
   }
 }
-  window.addEventListener("load", () => {
-  const token = getToken();
-
-  if (!token) {
-    alert("Sessão inválida. Faça login novamente.");
-    window.location.href = "https://coec-epb.github.io/login/";
-  }
-});
+  
   window.TOKEN = getToken();
 </script>
    <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "ab3e837119ed4133bd616d3b06ef0e25"}'></script><!-- End Cloudflare Web Analytics -->
