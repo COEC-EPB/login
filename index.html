@@ -302,6 +302,7 @@ async function logar() {
       erro.innerText = "❌ " + (data.error || "Matrícula ou senha incorreta!");
       return;
     }
+    localStorage.setItem("token", data.token);
 
     if (data.primeiroAcesso === true) {
   // primeiro acesso: guarda matrícula e espera definir senha
