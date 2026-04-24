@@ -217,21 +217,27 @@ async function logar(){
   }
 
   // ✅ salva token
-  setToken(json.token);
+setToken(json.token);
 
-  // ✅ sempre use o user do backend
-  localStorage.setItem("matricula", json.user.matricula);
-  localStorage.setItem("usuarioLogado","sim");
+// ✅ matrícula segura (não deixa gravar undefined)
+const matriculaSegura = String(
+  json?.user?.matricula ?? json?.matricula ?? matricula ?? ""
+).trim();
 
-  if (json.primeiroAcesso) {
-    window.matriculaTemp = json.user.matricula;
-    abrirModal("modalPrimeiroAcesso");
-    return;
-  }
-
-  location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+if (!matriculaSegura || matriculaSegura === "undefined") {
+  erro.innerText = "Login ok, mas matrícula não veio do servidor.";
+  return;
 }
 
+localStorage.setItem("matricula", matriculaSegura);
+localStorage.setItem("usuarioLogado", "sim");
+
+// opcional: já salva dados do user também (ajuda o form a preencher instantâneo)
+if (json?.user) {
+  localStorage.setItem("user_nome", json.user.nome || "");
+  localStorage.setItem("user_email", json.user.email || "");
+  localStorage.setItem("user_regional", json.user.regional || "");
+}
 
 
 /* ===== primeiro acesso ===== */
