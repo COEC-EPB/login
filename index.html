@@ -262,7 +262,6 @@
 <script>
 const BASE_URL = "https://long-hall-0aaa.pedro-fillype.workers.dev";
 
-// guarda o token retornado do /recuperar_senha
 let resetToken = null;
 
 function fecharModal(id){
@@ -277,6 +276,15 @@ function limparCPF(v){
   return String(v || "").replace(/\D/g, "");
 }
 
+// 🔥 FETCH PADRÃO (COM COOKIE)
+function apiFetch(url, options = {}) {
+  return fetch(url, {
+    credentials: "include",
+    ...options
+  });
+}
+
+// ================= LOGIN =================
 async function logar() {
   const matricula = document.getElementById("matricula").value.trim();
   const senha = document.getElementById("senha").value.trim();
@@ -289,11 +297,11 @@ async function logar() {
   }
 
   try {
-    const resp = await fetch(`${BASE_URL}/login`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ matricula, senha })
-});
+    const resp = await apiFetch(`${BASE_URL}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ matricula, senha })
+    });
 
     const data = await resp.json();
 
@@ -301,26 +309,21 @@ async function logar() {
       erro.innerText = "❌ " + (data.error || "Matrícula ou senha incorreta!");
       return;
     }
-    localStorage.setItem("token", data.token);
 
+    // 🔥 primeiro acesso
     if (data.primeiroAcesso === true) {
-  // primeiro acesso: guarda matrícula e espera definir senha
-  window.matriculaTemp = matricula;
-  abrirModal("modalPrimeiroAcesso");
-  return;
-}
+      window.matriculaTemp = matricula;
+      abrirModal("modalPrimeiroAcesso");
+      return;
+    }
 
-// login normal
-localStorage.setItem("matricula", matricula);
-localStorage.setItem("usuarioLogado", "sim");
-if (data.nome)     localStorage.setItem("nome", data.nome);
-if (data.email)    localStorage.setItem("email", data.email);
-if (data.regional) localStorage.setItem("regional", data.regional);
-
-window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
-
+    // login normal
     localStorage.setItem("matricula", matricula);
     localStorage.setItem("usuarioLogado", "sim");
+    if (data.user?.nome)     localStorage.setItem("nome", data.user.nome);
+    if (data.user?.email)    localStorage.setItem("email", data.user.email);
+    if (data.user?.regional) localStorage.setItem("regional", data.user.regional);
+
     window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
 
   } catch (err) {
@@ -328,7 +331,7 @@ window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
   }
 }
 
-// ======= PRIMEIRO ACESSO =======
+// ================= PRIMEIRO ACESSO =================
 async function salvarNovaSenha() {
   const nova = document.getElementById("novaSenha").value.trim();
   const conf = document.getElementById("confSenha").value.trim();
@@ -345,7 +348,7 @@ async function salvarNovaSenha() {
   }
 
   try {
-    const resp = await fetch(`${BASE_URL}/trocar_senha`, {
+    const resp = await apiFetch(`${BASE_URL}/trocar_senha`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -360,44 +363,16 @@ async function salvarNovaSenha() {
       erroSenha.innerText = "❌ " + (data.error || "Falha ao salvar senha");
       return;
     }
-    localStorage.setItem("token", data.token);
 
-    // 🔎 Busca dados completos do colaborador (incluindo regional)
-    try {
-      const colResp = await fetch(
-  `${BASE_URL}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`,
-  {
-    credentials: "include"
-  }
-);
-      const colData = await colResp.json();
-
-      if (colData.ok && colData.dados) {
-        localStorage.setItem("matricula", colData.dados.matricula || window.matriculaTemp);
-        localStorage.setItem("usuarioLogado", "sim");
-        if (colData.dados.nome)     localStorage.setItem("nome", colData.dados.nome);
-        if (colData.dados.email)    localStorage.setItem("email", colData.dados.email);
-        if (colData.dados.regional) localStorage.setItem("regional", colData.dados.regional);
-      } else {
-        // fallback se der algo errado
-        localStorage.setItem("matricula", window.matriculaTemp);
-        localStorage.setItem("usuarioLogado", "sim");
-      }
-    } catch (e) {
-      // se der erro na busca, ao menos mantém login
-      localStorage.setItem("matricula", window.matriculaTemp);
-      localStorage.setItem("usuarioLogado", "sim");
-    }
-
-    fecharModal("modalPrimeiroAcesso");
-    window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+    // 🔥 depois de trocar senha → FAZ LOGIN AUTOMÁTICO
+    await logar();
 
   } catch (err) {
     erroSenha.innerText = "❌ Erro: " + err.message;
   }
 }
 
-// ======= ESQUECI MINHA SENHA =======
+// ================= RECUPERAR SENHA =================
 function abrirRecuperacao() {
   document.getElementById("erroRec").innerText = "";
   document.getElementById("recMatricula").value = document.getElementById("matricula").value.trim();
@@ -409,7 +384,6 @@ async function confirmarRecuperacao() {
   const matricula = document.getElementById("recMatricula").value.trim();
   const cpf = limparCPF(document.getElementById("recCpf").value.trim());
   const erro = document.getElementById("erroRec");
-  erro.style.color = "#d60000";
   erro.innerText = "";
 
   if (!matricula || !cpf) {
@@ -431,13 +405,9 @@ async function confirmarRecuperacao() {
       return;
     }
 
-    // guarda token e abre modal de nova senha
     resetToken = data.token;
 
     fecharModal("modalRecuperar");
-    document.getElementById("erroNova").innerText = "";
-    document.getElementById("recNovaSenha").value = "";
-    document.getElementById("recConfSenha").value = "";
     abrirModal("modalNovaSenha");
 
   } catch (err) {
@@ -460,7 +430,7 @@ async function finalizarRecuperacao() {
     return;
   }
   if (!resetToken) {
-    erro.innerText = "❌ Token não encontrado. Refaça a recuperação.";
+    erro.innerText = "❌ Token não encontrado.";
     return;
   }
 
@@ -479,9 +449,8 @@ async function finalizarRecuperacao() {
     }
 
     fecharModal("modalNovaSenha");
-    alert("✅ Senha redefinida com sucesso! Agora faça login.");
+    alert("✅ Senha redefinida com sucesso! Faça login.");
 
-    // limpa token
     resetToken = null;
 
   } catch (err) {
