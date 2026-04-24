@@ -265,9 +265,6 @@
 <script>
 const BASE_URL = "https://long-hall-0aaa.pedro-fillype.workers.dev";
 
-  const data = await resp.json();
-
-localStorage.setItem("token", data.token); // 🔥 ESSENCIAL
 
 let resetToken = null;
 
@@ -307,7 +304,8 @@ async function logar() {
   }
 
   try {
-    const resp = await apiFetch(`${BASE_URL}/login`, {
+    // 🔥 NÃO usa apiFetch aqui
+    const resp = await fetch(`${BASE_URL}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ matricula, senha })
@@ -320,19 +318,17 @@ async function logar() {
       return;
     }
 
-    // 🔥 primeiro acesso
+    // 🔥 SALVA TOKEN
+    localStorage.setItem("token", data.token);
+
     if (data.primeiroAcesso === true) {
       window.matriculaTemp = matricula;
       abrirModal("modalPrimeiroAcesso");
       return;
     }
 
-    // login normal
     localStorage.setItem("matricula", matricula);
     localStorage.setItem("usuarioLogado", "sim");
-    if (data.user?.nome)     localStorage.setItem("nome", data.user.nome);
-    if (data.user?.email)    localStorage.setItem("email", data.user.email);
-    if (data.user?.regional) localStorage.setItem("regional", data.user.regional);
 
     window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
 
