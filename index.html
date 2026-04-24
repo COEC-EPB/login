@@ -281,16 +281,19 @@ function limparCPF(v){
 }
 
 // 🔥 FETCH PADRÃO (COM COOKIE)
+
 function apiFetch(url, options = {}) {
   const token = getToken();
 
+  const headers = new Headers(options.headers || {});
+  if (token) headers.set("Authorization", `Bearer ${token}`);
+
   return fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-    ...options
+    ...options,
+    headers
   });
 }
+
 // ================= LOGIN =================
 async function logar() {
   const matricula = document.getElementById("matricula").value.trim();
@@ -395,17 +398,23 @@ async function salvarNovaSenha() {
 
     const data = await resp.json();
 
+    
     if (!data.ok) {
       erroSenha.innerText = "❌ " + (data.error || "Falha ao salvar senha");
       return;
     }
 
-    // 🔥 depois de trocar senha → FAZ LOGIN AUTOMÁTICO
-    await logar();
 
-  } catch (err) {
-    erroSenha.innerText = "❌ Erro: " + err.message;
-  }
+    
+// ✅ Não chama logar() (evita pegar senha vazia)
+// Só finaliza fluxo
+fecharModal("modalPrimeiroAcesso");
+
+localStorage.setItem("matricula", window.matriculaTemp);
+localStorage.setItem("usuarioLogado", "sim");
+
+window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+
 }
 
 // ================= RECUPERAR SENHA =================
