@@ -210,6 +210,10 @@ async function logar(){
   });
 
   const json = await resp.json();
+  
+console.log("LOGIN RESPONSE:", json);
+console.log("matricula backend:", json?.user?.matricula);
+
 
   if (!json.ok) {
     erro.innerText = json.error || "Credenciais inválidas";
