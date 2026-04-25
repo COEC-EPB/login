@@ -260,8 +260,11 @@
     <p id="erroNova" class="msg"></p>
   </div>
 </div>
-<script src="https://coec-epb.github.io/login/js/auth.js"></script>
+<script src="auth.js"></script>
 <script>
+  if (isLogged()) {
+  window.location.href = "https://coec-epb.github.io/ADD/";
+}
 const BASE_URL = "https://long-hall-0aaa.pedro-fillype.workers.dev";
 
 // guarda o token retornado do /recuperar_senha
@@ -304,30 +307,16 @@ async function logar() {
       return;
     }
 
+    // 🔥 PRIMEIRO ACESSO
     if (data.primeiroAcesso === true) {
       window.matriculaTemp = matricula;
       abrirModal("modalPrimeiroAcesso");
       return;
     }
 
-    if (data.primeiroAcesso === true) {
-  // primeiro acesso: guarda matrícula e espera definir senha
-  window.matriculaTemp = matricula;
-  abrirModal("modalPrimeiroAcesso");
-  return;
-}
+    // ✅ LOGIN NORMAL (CORRETO)
+    setSession(data);
 
-// login normal
-localStorage.setItem("matricula", matricula);
-localStorage.setItem("usuarioLogado", "sim");
-if (data.nome)     localStorage.setItem("nome", data.nome);
-if (data.email)    localStorage.setItem("email", data.email);
-if (data.regional) localStorage.setItem("regional", data.regional);
-
-window.location.href = "https://coec-epb.github.io/ADD/";
-
-    localStorage.setItem("matricula", matricula);
-    localStorage.setItem("usuarioLogado", "sim");
     window.location.href = "https://coec-epb.github.io/ADD/";
 
   } catch (err) {
@@ -370,9 +359,9 @@ async function salvarNovaSenha() {
 
     // 🔎 Busca dados completos do colaborador (incluindo regional)
     try {
-      const colResp = await fetch(
-        `${BASE_URL}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`
-      );
+      const colResp = await authFetch(
+  `${BASE_URL}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`
+);
       const colData = await colResp.json();
 
       if (colData.ok && colData.dados) {
