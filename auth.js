@@ -28,14 +28,34 @@ function logout() {
   window.location.href = "/login/";
 }
 
-function authFetch(url, options = {}) {
+async function authFetch(url, options = {}) {
   const token = getToken();
 
-  return fetch(url, {
+  const headers = {
+    ...(options.headers || {}),
+    "Authorization": `Bearer ${token}`
+  };
+
+  const resp = await fetch(url, {
     ...options,
-    headers: {
-      ...(options.headers || {}),
-      Authorization: `Bearer ${token}`
-    }
+    headers
   });
+
+  // 🔥 NÃO AUTENTICADO
+  if (resp.status === 401) {
+    alert("Sessão expirada. Faça login novamente.");
+    logout();
+    return resp;
+  }
+
+  // 🔥 NÃO AUTORIZADO (ADMIN)
+  if (resp.status === 403) {
+    alert("🚫 USUÁRIO NÃO AUTORIZADO");
+
+    // redireciona pro ADD
+    window.location.href = "https://coec-epb.github.io/ADD/";
+    return resp;
+  }
+
+  return resp;
 }
