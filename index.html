@@ -322,11 +322,11 @@ if (data.nome)     localStorage.setItem("nome", data.nome);
 if (data.email)    localStorage.setItem("email", data.email);
 if (data.regional) localStorage.setItem("regional", data.regional);
 
-window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+window.location.href = "https://coec-epb.github.io/ADD/";
 
     localStorage.setItem("matricula", matricula);
     localStorage.setItem("usuarioLogado", "sim");
-    window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+    window.location.href = "https://coec-epb.github.io/ADD/";
 
   } catch (err) {
     erro.innerText = "❌ Erro: " + err.message;
@@ -391,7 +391,7 @@ async function salvarNovaSenha() {
     }
 
     fecharModal("modalPrimeiroAcesso");
-    window.location.href = "https://coec-epb.github.io/prestacao_de_contas/";
+    window.location.href = "https://coec-epb.github.io/ADD/";
 
   } catch (err) {
     erroSenha.innerText = "❌ Erro: " + err.message;
