@@ -265,7 +265,7 @@
   if (isLogged()) {
   window.location.href = "https://coec-epb.github.io/ADD/";
 }
-const BASE_URL = "https://long-hall-0aaa.pedro-fillype.workers.dev";
+const API = "https://long-hall-0aaa.pedro-fillype.workers.dev";
 
 // guarda o token retornado do /recuperar_senha
 let resetToken = null;
@@ -294,7 +294,7 @@ async function logar() {
   }
 
   try {
-    const resp = await fetch(`${BASE_URL}/login`, {
+    const resp = await fetch(`${API}/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ matricula, senha })
@@ -341,7 +341,7 @@ async function salvarNovaSenha() {
   }
 
   try {
-    const resp = await fetch(`${BASE_URL}/trocar_senha`, {
+    const resp = await fetch(`${API}/trocar_senha`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -360,7 +360,7 @@ async function salvarNovaSenha() {
     // 🔎 Busca dados completos do colaborador (incluindo regional)
     try {
       const colResp = await authFetch(
-  `${BASE_URL}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`
+  `${API}/colaborador?matricula=${encodeURIComponent(window.matriculaTemp)}`
 );
       const colData = await colResp.json();
 
@@ -410,7 +410,7 @@ async function confirmarRecuperacao() {
   }
 
   try {
-    const resp = await fetch(`${BASE_URL}/recuperar_senha`, {
+    const resp = await fetch(`${API}/recuperar_senha`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ matricula, cpf })
@@ -457,7 +457,7 @@ async function finalizarRecuperacao() {
   }
 
   try {
-    const resp = await fetch(`${BASE_URL}/definir_nova_senha`, {
+    const resp = await fetch(`${API}/definir_nova_senha`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token: resetToken, novaSenha: nova })
